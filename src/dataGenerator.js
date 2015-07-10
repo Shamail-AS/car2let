@@ -4,6 +4,7 @@
 
     function getData (PMT,SALE){
 
+    //no idea about this
 }
 
 var dataProvider = [
