@@ -1,0 +1,52 @@
+
+.flat-table {
+    margin-bottom: 10px;
+    border-collapse:collapse;
+    font-family: 'Lato', Calibri, Arial, sans-serif;
+    border: none;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+.flat-table th, .flat-table td {
+    box-shadow: inset 0 -1px rgba(0,0,0,0.25),
+    inset 0 1px rgba(0,0,0,0.25);
+}
+.flat-table th {
+    background: rgba(35, 35, 35, 0.65);
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    padding: 0.5em;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+    font-size: 1.2em;
+}
+.flat-table td {
+    color: #f7f7f7;
+    padding: 0.4em 1em 0.4em 1.15em;
+    text-shadow: 0 0 1px rgba(255,255,255,0.1);
+    font-size: 1em;
+}
+.flat-table tr {
+    -webkit-transition: background 0.3s, box-shadow 0.3s;
+    -moz-transition: background 0.3s, box-shadow 0.3s;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.flat-table-primary {
+    background: #3d98c2;
+}
+.flat-table-primary tr:hover {
+    background: rgba(20, 186, 195, 0.27);
+}
+.flat-table-danger tr:hover {
+    background: rgba(241, 161, 141, 0.83);
+}
+.flat-table-danger {
+    background: #f0302d;
+}
+.flat-table-cool {
+    background: #52be7f;
+}
+.flat-table-cool tr:hover {
+    background: rgba(93, 180, 141, 0.44);
+}

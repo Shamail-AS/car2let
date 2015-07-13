@@ -14,8 +14,10 @@
 	
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/tables.css" rel="stylesheet">
 
     <link rel="stylesheet" href="../dist/fonts/font-awesome.min.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="../dist/css/build.css"/>
 
     <!-- In <head> -->
@@ -87,15 +89,25 @@
         font-size: 9px;
     }
 
+    .darkp {
+        font-weight: lighter;
+        font-style: italic;
+        padding: 6px;
+        padding-right: 8px;
+        color: white;
+        background-color: darkslategrey;
+    }
+
 
 </style>
+
 <div class="container">
 
     <!-- Static navbar -->
     <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #36c68c;">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#" style="color: #ffffff;">Cars2Let Payment Calculator</a>
+                <a class="navbar-brand" href="#" style="color: #ffffff;">Car2Lator</a>
 
             </div>
 
@@ -114,16 +126,16 @@
 </div>
 
 <div class="row ">
-    <div class="col-md-4">
+    <div class="col-md-4" style="margin-left: 20px; margin-right: -20px" >
         <div class="panel panel-default box">
 
             <div class="panel-body">
-                <label>Select correct eligibility</label>
+                <label>Select correct relief</label>
                 <br>
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="radio">
-                            <input type="radio" id="radSEIS" class="PMT" name="eligibility">
+                            <input type="radio" id="radSEIS" class="relief" name="relief" onchange="setBasicData()" checked>
                             <label for="radSEIS">
                                 SEIS
                             </label>
@@ -132,7 +144,7 @@
 
                     <div class="col-sm-4">
                         <div class="radio">
-                            <input type="radio" id="radEIS" class="PMT" name="eligibility">
+                            <input type="radio" id="radEIS" class="relief" name="relief" onchange="setBasicData()">
                             <label for="radEIS">
                                 EIS
                             </label>
@@ -141,7 +153,7 @@
 
                     <div class="col-sm-4">
                         <div class="radio">
-                            <input type="radio" id="radNA" class="PMT" name="eligibility">
+                            <input type="radio" id="radNA" class="relief" name="relief" onchange="setBasicData()">
                             <label for="radNA">
                                 NA
                             </label>
@@ -153,50 +165,50 @@
 
                 <br>
 
-                <label>Investment</label><br>
+                <label>Investment</label> <p class="pull-right darkp" id="lblinv"></p><br>
                 <div class="slider" id="investment"></div>
                 <!--<input class="PMT" id="investment" type="range" min="5000" max="100000" step="500">-->
 
                 <br><br>
 
-                <label>Weeks utilized (per year)</label><br>
+                <label>Weeks utilized (per year)</label><p class="pull-right darkp" id="lblutilized"></p><br>
                 <div class="slider" id="utilized"></div>
 
 
                 <br><br>
 
-                <label>Avg. weekly rental</label><br>
+                <label>Avg. weekly rental</label><p class="pull-right darkp" id="lblrental"></p><br>
                 <div class="slider" id="rental"></div>
 
                 <br><br>
 
-                <label>Est. disposal value</label><br>
+                <label>Est. disposal value</label><p class="pull-right darkp" id="lbldisposal"></p><br>
                 <div class="slider" id="disposal"></div>
 
                 <br><br>
 
                 <div class="checkbox">
-                    <input type="checkbox" id="checkbox1" onchange="ToggleLoaned()">
-                    <label for="checkbox1">
+                    <input type="checkbox" id="loan" onchange="ToggleLoaned()">
+                    <label for="loan">
                         I took a loan
                     </label>
                 </div>
                 <br>
 
                 <div id="loaned">
-                    <label>Equity</label><br>
+                    <label>Equity</label><p class="pull-right darkp" id="lblequity"></p><br>
                     <div class="slider" id="equity"></div>
                     <!--<input class="PMT" id="equity" type="range" min="500" max="10000" step="50">-->
 
                     <br><br>
 
-                    <label>Interest Rate</label><br>
+                    <label>Interest Rate</label><p class="pull-right darkp" id="lblrate"></p><br>
                     <div class="slider" id="rate"></div>
                     <!--<input class="PMT" id="rate" type="range" min="5" max="25" step="1">-->
 
                     <br><br>
 
-                    <label>Period (months)</label><br>
+                    <label>Period (months)</label><p class="pull-right darkp" id="lblperiod"></p><br>
                     <div class="slider" id="period"></div>
                     <!--<input class="PMT" id="period2" type="range" min="12" max="60" step="1" >-->
 
@@ -210,232 +222,354 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-8" style="margin-left: -20px">
         <div class="panel panel-default box">
-            <div class="noSEISnoLEVERAGE"></div>
+            <div id="noSEISnoDEBT" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+        </div>
+        <div class="panel-default panel box">
+            <div class="row">
+                <div class="col-sm-6">
+                    <table class="flat-table flat-table-cool">
+                        <thead>
+                        <tr>
+                            <th>NO LEVERAGE</th>
+                            <th style="text-align: center">Without SEIS (£)</th>
+                            <th style="text-align: center">With SEIS (£)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Car Purchase price</td>
+                            <td id="0LevInv"></td>
+                            <td id="0LevRelInv"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Total Earnings</td>
+                            <td id="0LevEarn"></td>
+                            <td id="0LevRelEarn"></td>
+                        </tr>
+                        <tr>
+                            <td>Less:Invested Equity</td>
+                            <td id="0LevEquity"></td>
+                            <td id="0LevRelEquity"></td>
+                        </tr>
+                        <tr>
+                            <td>Return on Invested Equity</td>
+                            <td id="0LevRetOnInvest"></td>
+                            <td id="0LevRelRetOnInvest"></td>
+                        </tr>
+                        <tr>
+                            <td>Return on Invested Equity %</td>
+                            <td id="0LevRetOnInvestPerc"></td>
+                            <td id="0LevRelRetOnInvestPerc"></td>
+                        </tr>
+                        <tr>
+                            <td>Annualised %</td>
+                            <td id="0LevAnnualPerc"></td>
+                            <td id="0LevRelAnnualPerc"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <table class="flat-table flat-table-cool">
+                        <thead >
+                        <tr>
+                            <th id="tblLev"></th>
+                            <th style="text-align: center">Without SEIS (£)</th>
+                            <th style="text-align: center">With SEIS (£)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Car Purchase price</td>
+                            <td id="LevInv"></td>
+                            <td id="LevRelInv"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Less:Equity</td>
+                            <td id="LevEquity"></td>
+                            <td id="LevRelEquity"></td>
+
+                        </tr>
+                        <tr>
+                            <td id="borrowAt">Borrow @</td>
+                            <td id="LevIRate"></td>
+                            <td id="LevRelIRate"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Add: Interest Cost</td>
+                            <td id="LevICost"></td>
+                            <td id="LevRelICost"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Total Debt Repay</td>
+                            <td id="LevDebtRepay"></td>
+                            <td id="LevRelDebtRepay"></td>
+
+                        </tr>
+                        <tr>
+                            <td>Total Earnings</td>
+                            <td id="LevEarn"></td>
+                            <td id="LevRelEarn"></td>
+                        </tr>
+                        <tr>
+                            <td>Less: Debt Repay</td>
+                            <td id="LevDebtRepay1"></td>
+                            <td id="LevRelDebtRepay1"></td>
+                        </tr>
+                        <tr>
+                            <td>Available to Investor</td>
+                            <td id="LevToInvest"></td>
+                            <td id="LevRelToInvest"></td>
+                        </tr>
+
+                        <tr>
+                            <td>Less : Invested Equity</td>
+                            <td id="LevEquity1"></td>
+                            <td id="LevRelEquity1"></td>
+                        </tr>
+                        <tr>
+                            <td>Return on Invested Equity</td>
+                            <td id="LevRetOnInvest"></td>
+                            <td id="LevRelRetOnInvest"></td>
+                        </tr>
+                        <tr>
+                            <td>Return on Invested Equity %</td>
+                            <td id="LevRetOnInvestPerc"></td>
+                            <td id="LevRelRetOnInvestPerc"></td>
+                        </tr>
+                        <tr>
+                            <td>Annualised %</td>
+                            <td id="LevAnnualPerc"></td>
+                            <td id="LevRelAnnualPerc"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script src="formulas.js"></script>
+<script src="sliders.js"></script>
+<script src="dataGenerator.js"></script>
+<script src="noSEISnoDEBT.js"></script>
 <script>
     $().ready(function(){
        $("#loaned").hide();
+        setBasicData();
     });
 
-    var period = document.getElementById("period");
-    noUiSlider.create(period, {
-        start: [12],
-        connect: 'lower',
-        range: {
-            'min': 12,
-            'max': 60
-        },
-        pips: {
-            mode: 'values',
-            values: [12, 20, 30, 40, 50,60],
-            density: 4
-        }
-    });
-
-    var rate = document.getElementById("rate");
-    noUiSlider.create(rate, {
-        start: [5],
-        connect: 'lower',
-        range: {
-            'min': 5,
-            'max': 25
-        },
-        pips: {
-            mode: 'values',
-            values: [5, 10, 15, 20, 25],
-            density: 4
-        }
-    });
-
-    var inv = document.getElementById("investment");
-    noUiSlider.create(inv, {
-        start: [500],
-        connect: 'lower',
-        range: {
-            'min': 500,
-            'max': 10000
-        },
-        pips: {
-            mode: 'positions',
-            values: [0, 20, 40, 60, 80, 100],
-            density: 4
-        }
-    });
-
-    var eq = document.getElementById("equity");
-    noUiSlider.create(eq, {
-        start: [1],
-        connect: 'lower',
-        range: {
-            'min': 1,
-            'max': 100
-        },
-        pips: {
-            mode: 'positions',
-            values: [0, 20, 40, 60, 80, 100],
-            density: 4
-        }
-    });
-
-    var utilized = document.getElementById("utilized");
-    noUiSlider.create(utilized, {
-        start: [5],
-        connect: 'lower',
-        range: {
-            'min': 5,
-            'max': 52
-        },
-        pips: {
-            mode: 'positions',
-            values: [0, 20, 40, 60, 80, 100],
-            density: 4
-        }
-    });
-
-    var rental = document.getElementById("rental");
-    noUiSlider.create(rental, {
-        start: [50],
-        connect: 'lower',
-        range: {
-            'min': 50,
-            'max': 150
-        },
-        pips: {
-            mode: 'positions',
-            values: [0, 20, 40, 60, 80, 100],
-            density: 4
-        }
-    });
-
-    var disposal = document.getElementById("disposal");
-    noUiSlider.create(disposal, {
-        start: [1000],
-        connect: 'lower',
-        range: {
-            'min': 1000,
-            'max': 5000
-        },
-        pips: {
-            mode: 'positions',
-            values: [0, 20, 40, 60, 80, 100],
-            density: 4
-        }
-    });
 
     function ToggleLoaned()
     {
         $("#loaned").fadeToggle();
+        setBasicData();
     }
-    var object = $(".PMT").change(function(){
-
-        console.clear();
-        var period = $("#period").val();
-
-        var rate = $("#rate").val();
-        var invest = $("#investment").val();
-        var equity = $("#equity").val();
-        var debt = invest - equity;
 
 
-        var data = {
-            "period" : period,
-            "rate" : rate,
-            "investment" : invest,
-            "equity" : equity
+    var sliders = ($(".slider"));
+    for(var i = 0; i < sliders.length; i++)
+    {
+       sliders[i].noUiSlider.on("update",function(){
+            ShowValues();
+        });
+
+        sliders[i].noUiSlider.on("set",function(){
+            setBasicData();
+        });
+
+    }
+
+
+    function setBasicData() {
+        var sliderData = GetAllData();
+        var weeks = parseInt(sliderData.utilizedWeeks);
+        var avgRental = parseInt(sliderData.rental);
+        var Sale = parseInt(sliderData.disposalValue);
+
+        $("#borrowAt").html("Borrow @ "+Math.floor(sliderData.iRate)+" %");
+
+        var Basic = {
+            "inv": parseInt(sliderData.investment),
+            "equityPerc": parseInt(sliderData.eqPerc),
+            "period": parseInt(sliderData.loanPeriod),
+            "rate": parseInt(sliderData.iRate),
+            "relief": sliderData.relief
+        };
+        var BasicSEIS = {
+            "inv": parseInt(sliderData.investment),
+            "equityPerc": parseInt(sliderData.eqPerc),
+            "period": parseInt(sliderData.loanPeriod),
+            "rate": parseInt(sliderData.iRate),
+            "relief": "SEIS"
         };
 
-        var numrate = parseInt(rate)/100;
-        var numMonths = parseInt(period);
-        var pv = parseInt(debt);
 
-        var calcs = {
-            "rent" : 102*45/12,
-            "saleprice" : 4412,
-            "leverage" : 100*equity/invest,
-            "lease" : pmt(numrate/12,numMonths,pv,0,1),
-            "debt" : debt
+        var BasicNoLev = {
+            "inv": parseInt(sliderData.investment),
+            "equityPerc": 100,
+            "period": 0,
+            "rate": 0,
+            "relief": sliderData.relief
+        };
+        var BasicNoLevSEIS = {
+            "inv": parseInt(sliderData.investment),
+            "equityPerc": 100,
+            "period": 0,
+            "rate": 0,
+            "relief": "SEIS"
         };
 
 
-        console.log(data);
-        console.log("calculated data");
-        console.log(calcs);
+        var basicAssupmtions = GetBasicAssumptions(weeks, avgRental, Sale, Basic);
+        var basicAssupmtionsSEIS = GetBasicAssumptions(weeks, avgRental, Sale, BasicSEIS);
 
-    });
+        var basicNoLevAssumptions = GetBasicAssumptions(weeks, avgRental, Sale, BasicNoLev);
+        var basicNoLevAssumptionsSEIS = GetBasicAssumptions(weeks, avgRental, Sale, BasicNoLevSEIS);
 
+        setLevSEIS(basicAssupmtionsSEIS , BasicSEIS);
+        setLevNoSEIS(basicAssupmtions , Basic);
+        setNoLevNoSEIS(basicNoLevAssumptions, BasicNoLev);
+        setNoLevSEIS(basicNoLevAssumptionsSEIS, BasicNoLevSEIS);
+
+        var loaned = $("#loan").is(":checked");
+        if(loaned){
+            setChartData(basicAssupmtions);
+        }
+        else
+        {
+            setChartData(basicNoLevAssumptions);
+        }
+
+
+
+
+    }
+
+
+    function setLevSEIS(BAs,Basic)
+    {
+        // this method recieves the relief that was calculated using the radio buttons
+        // and shows the relief
+        var totEarn = BAs.year1.rentSaleRelief + BAs.year2.rentSaleRelief + BAs.year3.rentSaleRelief;
+        var LessEquity = Math.floor(Basic.inv*Basic.equityPerc/100);
+        var totLease = Math.floor(BAs.year1.Lease+BAs.year2.Lease+BAs.year3.Lease);
+        var debt = Basic.inv - LessEquity;
+        var RetOnInvest = Math.floor(((totEarn - totLease)-LessEquity));
+        var retPerc = Math.floor(100*RetOnInvest/LessEquity);
+
+
+
+        document.getElementById("LevRelInv").innerHTML = Basic.inv;
+        document.getElementById("LevRelEquity").innerHTML = LessEquity;
+        document.getElementById("LevRelIRate").innerHTML = debt;
+        document.getElementById("LevRelICost").innerHTML = Math.floor(totLease - debt);
+        document.getElementById("LevRelDebtRepay").innerHTML = totLease ;
+
+        document.getElementById("LevRelEarn").innerHTML = totEarn;
+        document.getElementById("LevRelDebtRepay1").innerHTML = totLease ;
+        document.getElementById("LevRelToInvest").innerHTML = totEarn - totLease ;
+        document.getElementById("LevRelEquity1").innerHTML = LessEquity;
+
+        document.getElementById("LevRelRetOnInvest").innerHTML = RetOnInvest;
+        document.getElementById("LevRelRetOnInvestPerc").innerHTML = retPerc+"%";
+        document.getElementById("LevRelAnnualPerc").innerHTML = Math.floor(retPerc/3)+"%";
+    }
+
+    function setLevNoSEIS(BAs,Basic)
+    {
+        // this method recieves the relief that was calculated using the radio buttons
+        // but doesn't show the relief
+        var totEarn = BAs.year1.rentSale + BAs.year2.rentSale + BAs.year3.rentSale;
+        var LessEquity = Math.floor(Basic.inv*Basic.equityPerc/100);
+
+        var totLease = Math.floor(BAs.year1.Lease+BAs.year2.Lease+BAs.year3.Lease);
+        var debt = Basic.inv - LessEquity;
+
+        var RetOnInvest = Math.floor(((totEarn - totLease)-LessEquity));
+        var retPerc = Math.floor(100*RetOnInvest/LessEquity);
+
+        document.getElementById("LevInv").innerHTML = Basic.inv;
+        document.getElementById("LevEquity").innerHTML = LessEquity;
+        document.getElementById("LevIRate").innerHTML = debt;
+        document.getElementById("LevICost").innerHTML = Math.floor(totLease - debt);
+        document.getElementById("LevDebtRepay").innerHTML = totLease ;
+
+        document.getElementById("LevEarn").innerHTML = totEarn;
+        document.getElementById("LevDebtRepay1").innerHTML = totLease ;
+        document.getElementById("LevToInvest").innerHTML = totEarn - totLease ;
+        document.getElementById("LevEquity1").innerHTML = LessEquity;
+
+        document.getElementById("LevRetOnInvest").innerHTML = RetOnInvest;
+        document.getElementById("LevRetOnInvestPerc").innerHTML = retPerc+"%";
+        document.getElementById("LevAnnualPerc").innerHTML = Math.floor(retPerc/3)+"%";
+    }
+
+    function setNoLevNoSEIS(BAs,Basic)
+    {
+        // this method has no leverage and no SEIS
+        var totEarn = BAs.year1.rentSale + BAs.year2.rentSale + BAs.year3.rentSale;
+        var LessEquity = Basic.inv*Basic.equityPerc/100;
+        var RetOnInvest = Math.floor(((totEarn-LessEquity)/Basic.inv)*100);
+
+        document.getElementById("0LevInv").innerHTML = Basic.inv;
+        document.getElementById("0LevEarn").innerHTML = totEarn;
+        document.getElementById("0LevEquity").innerHTML = LessEquity;
+        document.getElementById("0LevRetOnInvest").innerHTML = totEarn - LessEquity;
+        document.getElementById("0LevRetOnInvestPerc").innerHTML = RetOnInvest+"%";
+        document.getElementById("0LevAnnualPerc").innerHTML = Math.floor(RetOnInvest/3)+"%";
+    }
+
+    function setNoLevSEIS(BAs,Basic)
+    {
+        // this method has no leverage but receives relief and shows it
+        var totEarn = BAs.year1.rentSaleRelief + BAs.year2.rentSaleRelief + BAs.year3.rentSaleRelief;
+        var LessEquity = Basic.inv*Basic.equityPerc/100;
+        var RetOnInvest = Math.floor(((totEarn-LessEquity)/Basic.inv)*100);
+
+        document.getElementById("0LevRelInv").innerHTML = Basic.inv;
+        document.getElementById("0LevRelEarn").innerHTML = totEarn;
+        document.getElementById("0LevRelEquity").innerHTML = LessEquity;
+        document.getElementById("0LevRelRetOnInvest").innerHTML = totEarn - LessEquity;
+        document.getElementById("0LevRelRetOnInvestPerc").innerHTML = RetOnInvest+"%";
+        document.getElementById("0LevRelAnnualPerc").innerHTML = Math.floor(RetOnInvest/3)+"%";
+    }
 
     //amcharts
-    AmCharts.makeChart("chartdiv",
+
+    function setChartData(BAs)
+    {
+
+        var provider = [
             {
-                "type": "serial",
-                "categoryField": "category",
-                "startDuration": 1,
-                "categoryAxis": {
-                    "gridPosition": "start"
-                },
-                "trendLines": [],
-                "graphs": [
-                    {
-                        "balloonText": "[[title]] of [[category]]:[[value]]",
-                        "fillAlphas": 1,
-                        "id": "AmGraph-1",
-                        "title": "graph 1",
-                        "type": "column",
-                        "valueField": "column-1"
-                    },
-                    {
-                        "balloonText": "[[title]] of [[category]]:[[value]]",
-                        "fillAlphas": 1,
-                        "id": "AmGraph-2",
-                        "title": "graph 2",
-                        "type": "column",
-                        "valueField": "column-2"
-                    }
-                ],
-                "guides": [],
-                "valueAxes": [
-                    {
-                        "id": "ValueAxis-1",
-                        "title": "Axis title"
-                    }
-                ],
-                "allLabels": [],
-                "balloon": {},
-                "legend": {
-                    "useGraphSettings": true
-                },
-                "titles": [
-                    {
-                        "id": "Title-1",
-                        "size": 15,
-                        "text": "Chart Title"
-                    }
-                ],
-                "dataProvider": [
-                    {
-                        "category": "category 1",
-                        "column-1": 8,
-                        "column-2": 5
-                    },
-                    {
-                        "category": "category 2",
-                        "column-1": 6,
-                        "column-2": 7
-                    },
-                    {
-                        "category": "category 3",
-                        "column-1": 2,
-                        "column-2": 3
-                    }
-                ]
+                "category" : "Year 1",
+                "Earning" : BAs.year1.rentSaleRelief,
+                "Lease" : -BAs.year1.Lease,
+                "Net" : BAs.year1.NetCashFlowSEIS
+            },
+            {
+                "category" : "Year 2",
+                "Earning" : BAs.year2.rentSaleRelief,
+                "Lease" : -BAs.year2.Lease,
+                "Net" : BAs.year2.NetCashFlowSEIS
+            },
+            {
+                "category" : "Year 3",
+                "Earning" : BAs.year3.rentSaleRelief,
+                "Lease" : -BAs.year3.Lease,
+                "Net" : BAs.year3.NetCashFlowSEIS
             }
-    );
+        ];
+        updateChartData(provider);
+    }
+
 </script>
 
 </body>

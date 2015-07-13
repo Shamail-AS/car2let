@@ -51,7 +51,8 @@ function pmt(rate_per_period, number_of_payments, present_value, future_value, t
     if(rate_per_period != 0.0){
         // Interest rate exists
         var q = Math.pow(1 + rate_per_period, number_of_payments);
-        return -(rate_per_period * (future_value + (q * present_value))) / ((-1 + q) * (1 + rate_per_period * (type)));
+        var result = -(rate_per_period * (future_value + (q * present_value))) / ((-1 + q) * (1 + rate_per_period * (type)));
+        return result;
 
     } else if(number_of_payments != 0.0){
         // No interest rate, but number of payments exists
@@ -59,4 +60,36 @@ function pmt(rate_per_period, number_of_payments, present_value, future_value, t
     }
 
     return 0;
+}
+
+function newPMT(rate_per_period, number_of_payments, present_value) {
+
+//copied from http://www.onlineconversion.com/monthlypayment.htm
+
+    var i = rate_per_period;
+    if (i > 1.0) {
+        i = i / 100.0;
+        //rate_per_period = i;
+    }
+    i /= 12;
+
+    var pow = 1;
+    for (var j = 0; j < number_of_payments; j++){
+        pow = pow * (1 + i);
+    }
+
+    var money = (present_value * pow * i) / (pow - 1);
+    money = Math.round(100 * money) / 100;
+    money = money + ""
+    if (money.indexOf(".") == -1){
+        money = money + ".00";
+    }
+
+    var dec = money.indexOf(".");
+    var dollars = money.substring(0,dec);
+    var cents = money.substring(dec+1,dec+3);
+    cents = (cents.length < 2) ? cents + "0" : cents;
+    money = dollars + "." + cents;
+
+    return money;
 }
